@@ -1,0 +1,18 @@
+services:
+  netsecure:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONPATH: /app/backend
+      NETSECURE_ENVIRONMENT: production
+      NETSECURE_DATABASE_PATH: /app/data/netsecure.db
+      NETSECURE_SESSION_SECRET: ${NETSECURE_SESSION_SECRET:?Set NETSECURE_SESSION_SECRET in your environment}
+      NETSECURE_COOKIE_SECURE: "false" # Set true behind an HTTPS reverse proxy.
+      NETSECURE_ALLOW_PRIVATE_TARGETS: "false"
+    volumes:
+      - netsecure_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  netsecure_data:

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="NetSecure Cloud - authorized-target availability monitoring."
+    />
+    <title>NetSecure Cloud</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section id="auth-view" class="auth-layout" aria-live="polite">
+        <div class="brand-panel">
+          <a class="brand" href="/" aria-label="NetSecure Cloud home">
+            <span class="brand-mark" aria-hidden="true">N</span>
+            <span>NetSecure <em>Cloud</em></span>
+          </a>
+          <div class="hero-copy">
+            <p class="eyebrow">AUTHORIZED AVAILABILITY MONITORING</p>
+            <h1>Know when your services are reachable.</h1>
+            <p>
+              Monitor the TCP availability and response time of systems you are authorized to
+              check. Every result is saved as history.
+            </p>
+          </div>
+          <div class="security-note">
+            <span class="shield" aria-hidden="true">◆</span>
+            <p><strong>Built with guardrails.</strong> Targets are validated, checks have timeouts, and private addresses are blocked by default.</p>
+          </div>
+        </div>
+
+        <section class="auth-card">
+          <div id="setup-copy">
+            <p class="eyebrow">FIRST-TIME SETUP</p>
+            <h2>Create the administrator account</h2>
+            <p class="muted">This is the only account created by the initial local setup.</p>
+          </div>
+          <div id="login-copy" hidden>
+            <p class="eyebrow">WELCOME BACK</p>
+            <h2>Sign in to NetSecure</h2>
+            <p class="muted">Use your administrator account to manage approved targets.</p>
+          </div>
+
+          <form id="auth-form" novalidate>
+            <label>
+              Username
+              <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required />
+            </label>
+            <label>
+              Password
+              <input id="password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required />
+            </label>
+            <p id="password-hint" class="field-note">Choose at least 12 characters.</p>
+            <p id="auth-error" class="form-error" role="alert" hidden></p>
+            <button id="auth-submit" class="primary-button" type="submit">Create secure account</button>
+          </form>
+          <p class="auth-footnote">Only monitor systems you own or have explicit permission to monitor.</p>
+        </section>
+      </section>
+
+      <section id="dashboard-view" hidden>
+        <header class="topbar">
+          <a class="brand" href="/">
+            <span class="brand-mark" aria-hidden="true">N</span>
+            <span>NetSecure <em>Cloud</em></span>
+          </a>
+          <div class="topbar-actions">
+            <span id="user-name" class="user-chip"></span>
+            <button id="logout-button" class="text-button" type="button">Sign out</button>
+          </div>
+        </header>
+
+        <section class="dashboard-heading">
+          <div>
+            <p class="eyebrow">LIVE OVERVIEW</p>
+            <h1>Service health, at a glance.</h1>
+            <p class="muted">Run a safe TCP reachability check against your approved targets.</p>
+          </div>
+          <button id="open-target-form" class="primary-button" type="button">+ Add target</button>
+        </section>
+
+        <section class="stat-grid" aria-label="Target status summary">
+          <article class="stat-card online-card"><span>Online</span><strong id="online-count">0</strong><small>Last completed checks</small></article>
+          <article class="stat-card offline-card"><span>Offline</span><strong id="offline-count">0</strong><small>Needs attention</small></article>
+          <article class="stat-card unknown-card"><span>Not checked</span><strong id="unknown-count">0</strong><small>Awaiting first result</small></article>
+        </section>
+
+        <section class="target-section">
+          <div class="section-title-row">
+            <div>
+              <h2>Monitored targets</h2>
+              <p class="muted">Checks use a four-second connection timeout.</p>
+            </div>
+            <button id="refresh-button" class="secondary-button" type="button">Refresh</button>
+          </div>
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon" aria-hidden="true">+</div>
+            <h3>Add your first approved target</h3>
+            <p>For example, a public web server on port 443.</p>
+            <button id="empty-add-target" class="secondary-button" type="button">Add a target</button>
+          </div>
+          <div id="target-list" class="target-list" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="target-dialog" class="dialog">
+      <form id="target-form" method="dialog" novalidate>
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">APPROVED TARGET</p>
+            <h2>Add a TCP target</h2>
+          </div>
+          <button class="icon-button" value="cancel" aria-label="Close">×</button>
+        </div>
+        <p class="muted">Use a hostname or public IP address. Do not use URLs, paths, or systems without permission.</p>
+        <div class="form-grid">
+          <label>Display name<input name="name" maxlength="80" placeholder="Production website" required /></label>
+          <label>Hostname or IP<input name="host" maxlength="253" placeholder="example.com" required /></label>
+          <label>TCP port<input name="port" type="number" min="1" max="65535" value="443" required /></label>
+        </div>
+        <p id="target-error" class="form-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button id="cancel-target" class="secondary-button" value="cancel" type="button">Cancel</button>
+          <button id="save-target" class="primary-button" type="submit">Save target</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="history-dialog" class="dialog history-dialog">
+      <div class="dialog-header">
+        <div>
+          <p class="eyebrow">CHECK HISTORY</p>
+          <h2 id="history-title">Target history</h2>
+        </div>
+        <button id="close-history" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div id="history-content" class="history-list"></div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>

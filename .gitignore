@@ -1,0 +1,23 @@
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Databases and local data
+*.db
+*.sqlite
+*.sqlite3
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
