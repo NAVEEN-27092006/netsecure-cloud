@@ -88,3 +88,7 @@ The test suite covers protected endpoints, first-run setup, target creation, res
 3. Add e-mail, Slack, or webhook notifications for state changes.
 4. Add role-based users and CSRF protection if the product becomes multi-user.
 5. Add HTTPS/reverse-proxy deployment configuration for your selected cloud provider.
+
+## Live Demo
+
+[Open NetSecure Cloud](https://netsecure-cloud.onrender.com)
